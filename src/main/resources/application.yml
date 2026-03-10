@@ -3,26 +3,19 @@ server:
 
 security:
   jwt:
-    secret: 12345678901234567890123456789012
+    # En producción, sobreescribe este valor con la variable de entorno JWT_SECRET
+    secret: ${JWT_SECRET:12345678901234567890123456789012}
     expiration: 86400000
 
 app:
   r2dbc:
-    mysql:
-      host: mysql
-      port: 3306
-      database: sedesdb
-      username: root
-      password: root
-      pool:
-        initial-size: 5
-        max-size: 20
+    # Configuración única usando PostgreSQL (ideal para Azure Database for PostgreSQL)
     postgres:
-      host: postgres
-      port: 5432
-      database: gymdb
-      username: postgres
-      password: postgres
+      host: ${POSTGRES_HOST:postgres}
+      port: ${POSTGRES_PORT:5432}
+      database: ${POSTGRES_DB:gymdb}
+      username: ${POSTGRES_USER:postgres}
+      password: ${POSTGRES_PASSWORD:postgres}
       pool:
         initial-size: 5
         max-size: 20
