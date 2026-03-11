@@ -18,7 +18,7 @@ public class SedeRepositoryAdapter implements SedeRepositoryPort {
     private final SedeMapper mapper;
 
     public SedeRepositoryAdapter(
-            @Qualifier("mysqlR2dbcEntityTemplate") R2dbcEntityTemplate template,
+            @Qualifier("postgresR2dbcEntityTemplate") R2dbcEntityTemplate template,
             SedeMapper mapper
     ) {
         this.template = template;
