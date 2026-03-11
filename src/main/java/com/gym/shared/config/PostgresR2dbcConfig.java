@@ -16,17 +16,16 @@ import java.time.Duration;
 @Configuration
 public class PostgresR2dbcConfig {
 
-    @Bean(name = "postgresConnectionFactory")
-    public ConnectionFactory postgresConnectionFactory(
+    @Bean(name = "connectionFactory")
+    public ConnectionFactory connectionFactory(
             @Value("${app.r2dbc.postgres.host}") String host,
             @Value("${app.r2dbc.postgres.port}") int port,
             @Value("${app.r2dbc.postgres.database}") String database,
             @Value("${app.r2dbc.postgres.username}") String username,
-            @Value("${app.r2dbc.postgres.password}") String password,
-            @Value("${app.r2dbc.postgres.pool.initial-size}") int initialSize,
-            @Value("${app.r2dbc.postgres.pool.max-size}") int maxSize
+            @Value("${app.r2dbc.postgres.password}") String password
     ) {
-        ConnectionFactory connectionFactory = new PostgresqlConnectionFactory(
+
+        return new PostgresqlConnectionFactory(
                 PostgresqlConnectionConfiguration.builder()
                         .host(host)
                         .port(port)
@@ -35,19 +34,12 @@ public class PostgresR2dbcConfig {
                         .password(password)
                         .build()
         );
-
-        ConnectionPoolConfiguration poolConfiguration = ConnectionPoolConfiguration.builder(connectionFactory)
-                .initialSize(initialSize)
-                .maxSize(maxSize)
-                .maxIdleTime(Duration.ofMinutes(30))
-                .build();
-
-        return new ConnectionPool(poolConfiguration);
     }
 
-    @Bean(name = "postgresR2dbcEntityTemplate")
-    public R2dbcEntityTemplate postgresR2dbcEntityTemplate(
-            @Qualifier("postgresConnectionFactory") ConnectionFactory connectionFactory) {
+    @Bean(name = "r2dbcEntityTemplate")
+    public R2dbcEntityTemplate r2dbcEntityTemplate(
+            @Qualifier("connectionFactory") ConnectionFactory connectionFactory
+    ) {
         return new R2dbcEntityTemplate(connectionFactory);
     }
 }
