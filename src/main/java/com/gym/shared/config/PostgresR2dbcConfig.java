@@ -2,8 +2,7 @@ package com.gym.shared.config;
 
 import io.r2dbc.pool.ConnectionPool;
 import io.r2dbc.pool.ConnectionPoolConfiguration;
-import io.r2dbc.postgresql.PostgresqlConnectionConfiguration;
-import io.r2dbc.postgresql.PostgresqlConnectionFactory;
+import io.r2dbc.spi.ConnectionFactories;
 import io.r2dbc.spi.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 
-import java.time.Duration;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Configuration
 public class PostgresR2dbcConfig {
@@ -22,16 +22,20 @@ public class PostgresR2dbcConfig {
             @Value("${app.r2dbc.postgres.port}") int port,
             @Value("${app.r2dbc.postgres.database}") String database,
             @Value("${app.r2dbc.postgres.username}") String username,
-            @Value("${app.r2dbc.postgres.password}") String password
+            @Value("${app.r2dbc.postgres.password}") String password,
+            @Value("${app.r2dbc.postgres.ssl-mode:require}") String sslMode
     ) {
+        String sslParam = "disable".equalsIgnoreCase(sslMode) ? "disable" : "require";
+        String encodedPassword = URLEncoder.encode(password, StandardCharsets.UTF_8);
+        String url = "r2dbc:postgresql://%s:%s@%s:%d/%s?sslMode=%s"
+                .formatted(username, encodedPassword, host, port, database, sslParam);
 
-        return new PostgresqlConnectionFactory(
-                PostgresqlConnectionConfiguration.builder()
-                        .host(host)
-                        .port(port)
-                        .database(database)
-                        .username(username)
-                        .password(password)
+        ConnectionFactory raw = ConnectionFactories.get(url);
+        return new ConnectionPool(
+                ConnectionPoolConfiguration.builder(raw)
+                        .initialSize(2)
+                        .maxSize(10)
+                        .maxIdleTime(java.time.Duration.ofMinutes(10))
                         .build()
         );
     }

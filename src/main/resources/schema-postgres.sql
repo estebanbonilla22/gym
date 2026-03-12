@@ -1,3 +1,12 @@
+CREATE TABLE IF NOT EXISTS sedes (
+    id BIGSERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    direccion VARCHAR(150) NOT NULL,
+    ciudad VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20) NOT NULL,
+    estado VARCHAR(30) NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS users (
                                      id BIGSERIAL PRIMARY KEY,
                                      name VARCHAR(100) NOT NULL,

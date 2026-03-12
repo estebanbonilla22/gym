@@ -1,5 +1,6 @@
 server:
-  port: 8080
+  # Azure App Service asigna PORT dinámicamente; sin esto la app no responde
+  port: ${PORT:8080}
 
 security:
   jwt:
@@ -9,13 +10,14 @@ security:
 
 app:
   r2dbc:
-    # Configuración única usando PostgreSQL (ideal para Azure Database for PostgreSQL)
     postgres:
       host: ${POSTGRES_HOST:postgres}
       port: ${POSTGRES_PORT:5432}
       database: ${POSTGRES_DB:gymdb}
       username: ${POSTGRES_USER:postgres}
       password: ${POSTGRES_PASSWORD:postgres}
+      # Azure exige SSL. En local (Docker) usar POSTGRES_SSL_MODE=disable
+      ssl-mode: ${POSTGRES_SSL_MODE:require}
       pool:
         initial-size: 5
         max-size: 20
