@@ -40,8 +40,8 @@ public class PostgresR2dbcConfig {
         );
     }
 
-    @Bean(name = "r2dbcEntityTemplate")
-    public R2dbcEntityTemplate r2dbcEntityTemplate(
+    @Bean(name = "postgresR2dbcEntityTemplate")
+    public R2dbcEntityTemplate postgresR2dbcEntityTemplate(
             @Qualifier("connectionFactory") ConnectionFactory connectionFactory
     ) {
         return new R2dbcEntityTemplate(connectionFactory);
