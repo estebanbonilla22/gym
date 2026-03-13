@@ -26,9 +26,10 @@ public class PostgresR2dbcConfig {
             @Value("${app.r2dbc.postgres.ssl-mode:require}") String sslMode
     ) {
         String sslParam = "disable".equalsIgnoreCase(sslMode) ? "disable" : "require";
-        String encodedPassword = URLEncoder.encode(password, StandardCharsets.UTF_8);
+        String encodedUser = URLEncoder.encode(username, StandardCharsets.UTF_8);
+        String encodedPass = URLEncoder.encode(password, StandardCharsets.UTF_8);
         String url = "r2dbc:postgresql://%s:%s@%s:%d/%s?sslMode=%s"
-                .formatted(username, encodedPassword, host, port, database, sslParam);
+                .formatted(encodedUser, encodedPass, host, port, database, sslParam);
 
         ConnectionFactory raw = ConnectionFactories.get(url);
         return new ConnectionPool(
