@@ -1,23 +1,19 @@
 server:
-  # PORT lo asigna la nube (Azure, AWS Elastic Beanstalk, etc.)
   port: ${PORT:8080}
 
 security:
   jwt:
-    # En producción, sobreescribe este valor con la variable de entorno JWT_SECRET
-    secret: ${JWT_SECRET:12345678901234567890123456789012}
+    secret: ${JWT_SECRET}
     expiration: 86400000
 
 app:
   r2dbc:
     postgres:
-      host: ${POSTGRES_HOST:postgres}
-      port: ${POSTGRES_PORT:5432}
-      database: ${POSTGRES_DB:gymdb}
-      username: ${POSTGRES_USER:postgres}
-      password: ${POSTGRES_PASSWORD:postgres}
-      # En AWS RDS/Azure usar require; en local (Docker) usar disable
-      ssl-mode: ${POSTGRES_SSL_MODE:require}
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      database: ${POSTGRES_DB}
+      username: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
       pool:
         initial-size: 5
         max-size: 20
