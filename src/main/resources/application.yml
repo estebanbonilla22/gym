@@ -1,5 +1,5 @@
 server:
-  # Azure App Service asigna PORT dinámicamente; sin esto la app no responde
+  # PORT lo asigna la nube (Azure, AWS Elastic Beanstalk, etc.)
   port: ${PORT:8080}
 
 security:
@@ -16,7 +16,7 @@ app:
       database: ${POSTGRES_DB:gymdb}
       username: ${POSTGRES_USER:postgres}
       password: ${POSTGRES_PASSWORD:postgres}
-      # Azure exige SSL. En local (Docker) usar POSTGRES_SSL_MODE=disable
+      # En AWS RDS/Azure usar require; en local (Docker) usar disable
       ssl-mode: ${POSTGRES_SSL_MODE:require}
       pool:
         initial-size: 5
