@@ -1,0 +1,24 @@
+<main class="container">
+  <section class="card">
+    <h1>Gym Management Frontend</h1>
+    <p class="subtitle">Angular app connected to your deployed API</p>
+
+    <div class="row">
+      <span class="label">API Base URL</span>
+      <span class="value">{{ apiBaseUrl }}</span>
+    </div>
+
+    <div class="row">
+      <span class="label">Health Status</span>
+      <span class="badge" [class.ok]="healthStatus === 'ok'" [class.error]="healthStatus === 'error'">
+        {{ healthStatus }}
+      </span>
+    </div>
+
+    @if (message) {
+      <p class="message">{{ message }}</p>
+    }
+
+    <button type="button" (click)="checkHealth()">Re-check API</button>
+  </section>
+</main>
